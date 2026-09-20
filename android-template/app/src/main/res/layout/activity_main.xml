@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
+    android:layoutWidth="match_parent"
+    android:layoutHeight="match_parent"
+    android:background="@color/splash_bg_color">
+
+    <!-- 1. Main Web Content Layer with Pull-To-Refresh -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layoutWidth="match_parent"
+        android:layoutHeight="match_parent">
+
+        <WebView
+            android:id="@+id/mainWebView"
+            android:layoutWidth="match_parent"
+            android:layoutHeight="match_parent"
+            android:background="#000000" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Top Loading Progress Bar -->
+    <ProgressBar
+        android:id="@+id/webProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layoutWidth="match_parent"
+        android:layoutHeight="3dp"
+        android:layout_gravity="top"
+        android:indeterminate="false"
+        android:max="100"
+        android:progressDrawable="@android:drawable/progress_horizontal"
+        android:visibility="gone" />
+
+    <!-- 2. Offline Fallback Error Layout -->
+    <LinearLayout
+        android:id="@+id/offlineLayout"
+        android:layoutWidth="match_parent"
+        android:layoutHeight="match_parent"
+        android:background="@color/offline_bg"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layoutWidth="80dp"
+            android:layoutHeight="80dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_offline_wifi"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:layoutWidth="wrap_content"
+            android:layoutHeight="wrap_content"
+            android:text="@string/offline_title"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layoutWidth="wrap_content"
+            android:layoutHeight="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/offline_desc"
+            android:textColor="#94A3B8"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRetry"
+            android:layoutWidth="wrap_content"
+            android:layoutHeight="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/primary"
+            android:text="@string/offline_retry"
+            android:textColor="#06080F"
+            android:textStyle="bold"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+
+    <!-- 3. Fullscreen Video / Custom View Container for HTML5 Video -->
+    <FrameLayout
+        android:id="@+id/customViewContainer"
+        android:layoutWidth="match_parent"
+        android:layoutHeight="match_parent"
+        android:background="#000000"
+        android:visibility="gone" />
+
+    <!-- 4. Native Splash Screen Overlay Layer -->
+    <FrameLayout
+        android:id="@+id/splashContainer"
+        android:layoutWidth="match_parent"
+        android:layoutHeight="match_parent"
+        android:background="@color/splash_bg_color">
+
+        <!-- Video Splash View (for MP4 videos) -->
+        <VideoView
+            android:id="@+id/splashVideoView"
+            android:layoutWidth="match_parent"
+            android:layoutHeight="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!-- Image / Logo Splash View -->
+        <LinearLayout
+            android:id="@+id/splashImageLayout"
+            android:layoutWidth="wrap_content"
+            android:layoutHeight="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/splashImageView"
+                android:layoutWidth="120dp"
+                android:layoutHeight="120dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <ProgressBar
+                android:layoutWidth="32dp"
+                android:layoutHeight="32dp"
+                android:layout_marginTop="20dp"
+                android:indeterminate="true" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</FrameLayout>
