@@ -38,8 +38,10 @@ jobs:
           python-version: '3.11'
 
       - name: Create Build Config Payload
+        env:
+          CONFIG_JSON: ${{ inputs.config_json }}
         run: |
-          echo '${{ inputs.config_json }}' > build_config.json
+          python3 -c "import os; f=open('build_config.json', 'w', encoding='utf-8'); f.write(os.environ['CONFIG_JSON']); f.close()"
           python3 scripts/configure-project.py build_config.json
 
       - name: Grant Execute Permissions for Gradlew
