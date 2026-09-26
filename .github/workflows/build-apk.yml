@@ -9,6 +9,10 @@ on:
         type: string
         default: '{"url":"https://hypex.tech","appName":"HYPEX Web","packageName":"tech.hypex.app","versionName":"1.0.0","versionCode":1}'
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   build:
     name: Build & Sign Android APK
@@ -97,9 +101,19 @@ jobs:
           path: dist/hypex-app-release.apk
           retention-days: 1
 
+      - name: Create Direct GitHub Release for APK Download
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="v-apk-${{ github.run_id }}"
+          echo "Creating direct GitHub release: $TAG_NAME"
+          gh release create "$TAG_NAME" dist/hypex-app-release.apk \
+            --title "HYPEX Android APK (Build #${{ github.run_id }})" \
+            --notes "Otomatik derlenen Android APK paketi. Doğrudan telefonunuza indirip kurabilirsiniz." || echo "Release creation skipped"
+
       - name: Temporary Storage Upload (Direct Download URL)
         run: |
-          echo "===> Uploading APK to temporary 1-hour fast download bridge..."
-          DOWNLOAD_URL=$(curl --upload-file dist/hypex-app-release.apk "https://transfer.sh/hypex-app.apk" || echo "")
+          echo "===> Uploading APK to temporary fast download bridge..."
+          DOWNLOAD_URL=$(curl -s --upload-file dist/hypex-app-release.apk "https://transfer.sh/hypex-app.apk" || echo "")
           echo "Direct Temporary Download URL: $DOWNLOAD_URL"
           echo "DOWNLOAD_URL=$DOWNLOAD_URL" >> $GITHUB_ENV

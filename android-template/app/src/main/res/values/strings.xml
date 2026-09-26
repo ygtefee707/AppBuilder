@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">__APP_NAME__</string>
+    <string name="offline_title">İnternet Bağlantısı Yok</string>
+    <string name="offline_desc">Lütfen internet bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="offline_retry">Tekrar Dene</string>
+    <string name="exit_prompt">Çıkmak için tekrar dokunun</string>
 </resources>
