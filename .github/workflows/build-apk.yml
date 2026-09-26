@@ -28,8 +28,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Setup Android SDK Environment
+        run: |
+          yes | sdkmanager --licenses > /dev/null 2>&1 || true
 
       - name: Setup Python 3
         uses: actions/setup-python@v5
