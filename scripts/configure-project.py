@@ -35,8 +35,8 @@ def main():
 
     # Android SDK & Version Range
     min_sdk = int(config.get("minSdk", 24))
-    target_sdk = int(config.get("targetSdk", 34))
-    compile_sdk = max(target_sdk, int(config.get("compileSdk", 34)))
+    target_sdk = min(int(config.get("targetSdk", 34)), 34)
+    compile_sdk = 34
 
     # Extract Web Host
     parsed_url = urlparse(url if url.startswith("http") else f"https://{url}")
