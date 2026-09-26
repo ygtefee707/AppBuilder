@@ -148,26 +148,31 @@ def main():
             shutil.rmtree(os.path.join(template_dir, "app", "src", "main", "java", "com", "hypex"))
         print(f"[+] Refactored Java package directory to: {new_java_dir}")
 
-    # 8. Process Icon Upload if base64 provided
+    # 8. Process Icon (Custom or Default Fallback)
     icon_b64 = config.get("iconBase64")
+    icon_bytes = None
     if icon_b64:
         try:
             if "," in icon_b64:
                 icon_b64 = icon_b64.split(",")[1]
             icon_bytes = base64.b64decode(icon_b64)
-            
-            # Save master icon
-            res_dir = os.path.join(template_dir, "app", "src", "main", "res")
-            for density in ["mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"]:
-                density_dir = os.path.join(res_dir, f"mipmap-{density}")
-                os.makedirs(density_dir, exist_ok=True)
-                with open(os.path.join(density_dir, "ic_launcher.png"), "wb") as icon_f:
-                    icon_f.write(icon_bytes)
-                with open(os.path.join(density_dir, "ic_launcher_round.png"), "wb") as icon_f:
-                    icon_f.write(icon_bytes)
-            print("[+] Injected launcher icons across all mipmap densities")
         except Exception as e:
             print(f"[!] Warning: Failed to decode icon base64: {e}")
+
+    # 1x1 default emerald pixel fallback if no icon provided
+    if not icon_bytes:
+        # Valid tiny 1x1 transparent/colored PNG
+        icon_bytes = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAPElEQVR42u3BAQ0AAADCoPdPbQ8HFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOA1BiAAAcQ1mkgAAAAASUVORK5CYII=")
+
+    res_dir = os.path.join(template_dir, "app", "src", "main", "res")
+    for density in ["mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"]:
+        density_dir = os.path.join(res_dir, f"mipmap-{density}")
+        os.makedirs(density_dir, exist_ok=True)
+        with open(os.path.join(density_dir, "ic_launcher.png"), "wb") as icon_f:
+            icon_f.write(icon_bytes)
+        with open(os.path.join(density_dir, "ic_launcher_round.png"), "wb") as icon_f:
+            icon_f.write(icon_bytes)
+    print("[+] Injected launcher icons across all mipmap densities")
 
     # 9. Process Splash Video or Image if base64 provided
     splash_b64 = config.get("splashMediaBase64")
